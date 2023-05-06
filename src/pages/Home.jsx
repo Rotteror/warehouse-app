@@ -1,7 +1,9 @@
-import Products from "../components/Products";
-import Warehouses from "../components/Warehouses";
-import AddProductModal from "../components/AddProductModal";
-import AddWarehouseModal from "../components/AddWarehouseModal";
+import {
+  Products,
+  Warehouses,
+  AddProductModal,
+  AddWarehouseModal,
+} from "../components/index";
 
 export default function Home() {
   return (

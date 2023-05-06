@@ -6,7 +6,7 @@ export default function Header() {
       <div className="container">
         <a className="navbar-brand" href="/">
           <div className="d-flex">
-            <img src={logo} alt="logo" className="mr-2" />
+            <img src={logo} alt="logo" width="50" height="40" />
             <div>Warehouse App</div>
           </div>
         </a>

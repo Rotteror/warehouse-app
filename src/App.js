@@ -2,10 +2,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
 
 import Header from "./components/Header";
-
-import Home from "./pages/Home";
-import Warehouse from "./pages/Warehouse";
-import NotFound from "./pages/NotFound";
+import { Home, Warehouse, NotFound } from "./pages";
 
 const cache = new InMemoryCache({
   typePolicies: {
