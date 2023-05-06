@@ -5,10 +5,11 @@ import Spinner from "./Spinner";
 import { GET_PRODUCTS } from "../queries/productQueries";
 import { products } from "../mockData";
 export default function Products() {
-  // const { loading, error, data } = useQuery(GET_PRODUCTS);
+  const { loading, error, data } = useQuery(GET_PRODUCTS);
 
-  // if (loading) return <Spinner />;
-  // if (error) return <p>Something went wrong...</p>;
+  if (loading) return <Spinner />;
+  if (error) return <p>Something went wrong...</p>;
+
   return (
     <>
       <table className="table table-hover mt-3">

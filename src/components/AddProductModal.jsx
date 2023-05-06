@@ -6,11 +6,11 @@ import { GET_PRODUCTS } from "../queries/productQueries";
 
 export default function AddProductModal() {
   const [name, setName] = useState("");
-  const [type, setType] = useState("");
+  const [typeProduct, setType] = useState("Non Hazard");
   const [unit, setUnit] = useState("");
 
   const [addProduct] = useMutation(ADD_PRODUCT, {
-    variables: { name, type, unit },
+    variables: { name, typeProduct, unit },
     update(cache, { data: { addProduct } }) {
       const { products } = cache.readQuery({
         query: GET_PRODUCTS,
@@ -23,14 +23,14 @@ export default function AddProductModal() {
   });
 
   const onSubmit = (e) => {
-    console.log(name, type, unit, "add product");
+    console.log(name, typeProduct, unit, "add product");
     e.preventDefault();
-    if (name === "" || type === "" || unit === "") {
+    if (name === "" || typeProduct === "" || unit === "") {
       return alert("Please fill in all fields");
     }
 
     // add to DB
-    addProduct(name, type, unit);
+    addProduct(name, typeProduct, Number(unit));
     // clear local state
     setName("");
     setType("");
@@ -83,11 +83,11 @@ export default function AddProductModal() {
                   <select
                     id="type"
                     className="form-select"
-                    value={type}
+                    value={typeProduct}
                     onChange={(e) => setType(e.target.value)}
                   >
-                    <option value="Non Hazards">Non Hazards</option>
-                    <option value="Hazards">Hazards</option>
+                    <option value="Non Hazard">Non Hazard</option>
+                    <option value="Hazards">Hazard</option>
                   </select>
                   <label className="form-label">Units</label>
                   <input
