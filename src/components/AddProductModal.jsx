@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { FaUser } from "react-icons/fa";
 import { useMutation } from "@apollo/client";
 import { ADD_PRODUCT } from "../mutations/productMutations";
 import { GET_PRODUCTS } from "../queries/productQueries";
@@ -23,14 +22,14 @@ export default function AddProductModal() {
   });
 
   const onSubmit = (e) => {
-    console.log(name, typeProduct, unit, "add product");
     e.preventDefault();
     if (name === "" || typeProduct === "" || unit === "") {
       return alert("Please fill in all fields");
     }
-
+    
     // add to DB
-    addProduct(name, typeProduct, Number(unit));
+    
+    addProduct(name, typeProduct, unit);
     // clear local state
     setName("");
     setType("");
@@ -87,7 +86,7 @@ export default function AddProductModal() {
                     onChange={(e) => setType(e.target.value)}
                   >
                     <option value="Non Hazard">Non Hazard</option>
-                    <option value="Hazards">Hazard</option>
+                    <option value="Hazard">Hazard</option>
                   </select>
                   <label className="form-label">Units</label>
                   <input

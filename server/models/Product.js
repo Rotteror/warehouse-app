@@ -6,8 +6,6 @@ const ProductSchema = new mongoose.Schema({
   },
   typeProduct: {
     type: String,
-    enum: ["Hazard", "Non Hazard"],
-    default: "neutral",
   },
   unit: {
     type: Number,

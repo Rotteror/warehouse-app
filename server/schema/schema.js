@@ -9,8 +9,6 @@ const {
   GraphQLSchema,
   GraphQLList,
   GraphQLNonNull,
-  GraphQLEnumType,
-  GraphQLInt,
 } = require("graphql");
 
 // Warehouse Type
@@ -20,11 +18,17 @@ const WarehouseType = new GraphQLObjectType({
     id: { type: GraphQLID },
     name: { type: GraphQLString },
     status: { type: GraphQLString },
-    size: { type: GraphQLInt },
+    size: { type: GraphQLString },
     products: {
       type: ProductType,
       resolve(parent, args) {
         return Product.findById(parent.clientId);
+      },
+    },
+    history: {
+      type: HistoryType,
+      resolve(parent, args) {
+        return History.findById(parent.clientId);
       },
     },
   }),
@@ -37,7 +41,7 @@ const ProductType = new GraphQLObjectType({
     id: { type: GraphQLID },
     name: { type: GraphQLString },
     typeProduct: { type: GraphQLString },
-    unit: { type: GraphQLInt },
+    unit: { type: GraphQLString },
   }),
 });
 
@@ -52,7 +56,7 @@ const HistoryType = new GraphQLObjectType({
         return Product.findById(parent.clientId);
       },
     },
-    amount: { type: GraphQLInt },
+    amount: { type: GraphQLString },
     created_At: { type: GraphQLString },
   }),
 });
@@ -106,33 +110,76 @@ const RootQuery = new GraphQLObjectType({
 const mutation = new GraphQLObjectType({
   name: "Mutation",
   fields: {
+    // Product
     addProduct: {
       type: ProductType,
       args: {
         name: { type: GraphQLNonNull(GraphQLString) },
-        typeProduct: {
-          type: new GraphQLEnumType({
-            name: "ProductStatus",
-            values: {
-              hazard: { value: "Hazard" },
-              nonhazard: { value: "Non Hazard" },
-            },
-          }),
-          defaultValue: "Neutral",
-        },
-        unit: { type: GraphQLNonNull(GraphQLInt) },
+        typeProduct: { type: GraphQLNonNull(GraphQLString) },
+        unit: { type: GraphQLNonNull(GraphQLString) },
       },
       resolve(parent, args) {
-        console.log(args)
         const product = new Product({
           name: args.name,
           typeProduct: args.typeProduct,
           unit: args.unit,
         });
-        console.log(product, 'in server, schema')
+
         return product.save();
       },
     },
+    updateProduct: {
+      type: ProductType,
+      args: {
+        id: { type: GraphQLNonNull(GraphQLID) },
+        name: { type: GraphQLNonNull(GraphQLString) },
+        typeProduct: { type: GraphQLNonNull(GraphQLString) },
+        // typeProduct: {
+        //   type: new GraphQLEnumType({
+        //     name: "ProductStatusUpdate",
+        //     values: {
+        //       hazard: { value: "Hazard" },
+        //       nonhazard: { value: "Non Hazard" },
+        //     },
+        //   }),
+        //   defaultValue: "Neutral",
+        // },
+        unit: { type: GraphQLNonNull(GraphQLString) },
+      },
+      async resolve(parent, args) {
+        console.log(args)
+        return await Product.findByIdAndUpdate(
+          args.id,
+          {
+            $set: {
+              name: args.name,
+              typeProduct: args.typeProduct,
+              unit: args.unit,
+            },
+          },
+          { new: true }
+        );
+      },
+    },
+    //Warehouse
+    addWarehouse: {
+      type: WarehouseType,
+      args: {
+        name: { type: GraphQLNonNull(GraphQLString) },
+        status: { type: GraphQLNonNull(GraphQLString) },
+        size: { type: GraphQLNonNull(GraphQLString) },
+      },
+      resolve(parent, args) {
+        const warehouse = new Warehouse({
+          name: args.name,
+          status: args.status,
+          size: args.size,
+        });
+
+        return warehouse.save();
+      },
+    },
+    // History
   },
 });
 

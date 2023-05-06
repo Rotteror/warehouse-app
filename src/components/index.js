@@ -8,3 +8,5 @@ export { default as Products } from "./Products";
 export { default as WarehouseCard } from "./WarehouseCard";
 export { default as WarehouseInfo } from "./WarehouseInfo";
 export { default as Warehouses } from "./Warehouses";
+export { default as ImportModal } from "./ImportModal";
+export { default as ExportModal } from "./ExportModal";

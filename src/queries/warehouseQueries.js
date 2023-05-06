@@ -7,8 +7,6 @@ const GET_WAREHOUSES = gql`
       name
       status
       size
-      products
-      history
     }
   }
 `;
@@ -20,12 +18,16 @@ const GET_WAREHOUSE = gql`
       name
       status
       size
-      products
+      products{
+        id
+      }
       history {
         id
         history_type
         amount
-        productId
+        productId {
+          id
+        }
         created_At
       }
     }

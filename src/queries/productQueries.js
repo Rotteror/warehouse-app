@@ -6,6 +6,7 @@ const GET_PRODUCTS = gql`
       id
       name
       typeProduct
+      unit
     }
   }
 `;

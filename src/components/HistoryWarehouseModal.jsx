@@ -1,14 +1,10 @@
-import {
-  FaWarehouse,
-  FaHistory,
-  FaBiohazard,
-  FaPhone,
-  FaHouseUser,
-} from "react-icons/fa";
+import { FaHistory } from "react-icons/fa";
 import ProductRow from "./ProductRow";
 
 export default function HistoryWareHouseModal({ products }) {
-  const handleDownloadHistory = () => {};
+  const handleDownloadHistory = () => {
+    // TO DO: use FileSaver depend
+  };
 
   return (
     <>
@@ -41,13 +37,17 @@ export default function HistoryWareHouseModal({ products }) {
               ></button>
             </div>
             <div className="modal-body">
-              <table className="table table-hover text-dark mt-3">
-                <tbody>
-                  {products.map((product) => (
-                    <ProductRow key={product.id} product={product} />
-                  ))}
-                </tbody>
-              </table>
+              {products === null ? (
+                <p>No history have been registered for this warehouse.</p>
+              ) : (
+                <table className="table table-hover text-dark mt-3">
+                  <tbody>
+                    {products.map((product) => (
+                      <ProductRow key={product.id} product={product} />
+                    ))}
+                  </tbody>
+                </table>
+              )}
             </div>
             <div className="modal-footer">
               <button
@@ -59,7 +59,7 @@ export default function HistoryWareHouseModal({ products }) {
               </button>
               <button
                 type="button"
-                className="btn btn-secondary"
+                className="btn btn-primary"
                 onClick={() => handleDownloadHistory}
               >
                 Download as .CVS file

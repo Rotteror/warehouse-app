@@ -3,7 +3,7 @@ import { useQuery } from "@apollo/client";
 import ProductRow from "./ProductRow";
 import Spinner from "./Spinner";
 import { GET_PRODUCTS } from "../queries/productQueries";
-import { products } from "../mockData";
+
 export default function Products() {
   const { loading, error, data } = useQuery(GET_PRODUCTS);
 
@@ -21,7 +21,7 @@ export default function Products() {
           </tr>
         </thead>
         <tbody>
-          {products.map((product) => (
+          {data.products.map((product) => (
             <ProductRow key={product.id} product={product} />
           ))}
         </tbody>

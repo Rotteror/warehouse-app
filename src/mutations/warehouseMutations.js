@@ -1,41 +1,29 @@
 import { gql } from "@apollo/client";
 
 const ADD_WAREHOUSE = gql`
-  mutation AddWarehouse(
+  mutation addWarehouse(
     $name: String!
     $status: String!
-    $size: number!
-    $products: [Product!]!
-    $history: [History!]!
+    $size: String!
   ) {
-    AddWarehouse(
+    addWarehouse(
       name: $name
       status: $status
       size: $size
-      products: $products
-      history: $history
     ) {
       id
       name
       status
       size
-      products
-      history {
-        id
-        history_type
-        amount
-        productId
-        created_At
-      }
     }
   }
 `;
 
 const UPDATE_WAREHOUSE = gql`
-  mutation UpdateWarehouse(
+  mutation updateWarehouse(
     $name: String!
     $status: String!
-    $size: number!
+    $size: String!
     $products: [Product!]!
     $history: [History!]!
   ) {

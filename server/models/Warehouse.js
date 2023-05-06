@@ -7,10 +7,10 @@ const WarehouseSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ["Hazards", "Non Hazards"],
+    required: true,
   },
   size: {
-    type: Number,
+    type: String,
     required: true,
   },
   products: [
