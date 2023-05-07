@@ -1,13 +1,14 @@
 import { useQuery, useMutation } from "@apollo/client";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import { GET_WAREHOUSE } from "../queries/warehouseQueries";
+import { GET_WAREHOUSE, GET_WAREHOUSES } from "../queries/warehouseQueries";
 import { GET_PRODUCTS } from "../queries/productQueries";
 import { UPDATE_PRODUCT, DELETE_PRODUCT } from "../mutations/productMutations";
+import { UPDATE_WAREHOUSE } from "../mutations/warehouseMutations";
 
 export default function ImportProductRow({ product }) {
   const [amountToBeImported, setAmountToBeImported] = useState(1);
-  const [leftAmount, setLeftAmount] = useState(product.unit);
+  //   const [leftAmount, setLeftAmount] = useState(product.unit);
   const { id } = useParams();
   const { loading, error, data } = useQuery(GET_WAREHOUSE, {
     variables: { id },
@@ -19,12 +20,23 @@ export default function ImportProductRow({ product }) {
     refetchQueries: [{ query: GET_PRODUCTS }],
   });
 
+  const [updateWarehouse] = useMutation(UPDATE_WAREHOUSE, {
+    variables: {
+      id: id,
+      productId: product.id,
+      name: product.name,
+      typeProduct: product.typeProduct,
+      unit: "" + amountToBeImported,
+    },
+    refetchQueries: [{ query: GET_WAREHOUSES }],
+  });
+
   const [updateProduct] = useMutation(UPDATE_PRODUCT, {
     variables: {
       id: product.id,
       name: product.name,
       typeProduct: product.typeProduct,
-      unit: leftAmount,
+      unit: "" + (product.unit - amountToBeImported),
     },
     update(cache, { data: { updateProduct } }) {
       const { products } = cache.readQuery({
@@ -32,20 +44,27 @@ export default function ImportProductRow({ product }) {
       });
       cache.writeQuery({
         query: GET_PRODUCTS,
-        data: { products: [...products, updateProduct] },
+        data: { products: [...products] },
       });
     },
   });
 
   const handleImportProduct = (e) => {
-    console.log("have fun");
     e.preventDefault();
-    setLeftAmount(product.unit - amountToBeImported);
-    if (leftAmount > 0) {
+    const leftAmount = product.unit - amountToBeImported;
+
+    if (leftAmount > 0)
       updateProduct(product.id, product.name, product.typeProduct, leftAmount);
-    } else {
-      deleteProduct(product.id);
-    }
+    else deleteProduct(product.id);
+
+    //update warehouse, add history
+    updateWarehouse(
+      id,
+      product.id,
+      product.name,
+      product.typeProduct,
+      amountToBeImported
+    );
   };
 
   const handleAmountChange = (e) => {

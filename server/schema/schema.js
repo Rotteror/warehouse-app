@@ -67,7 +67,7 @@ const RootQuery = new GraphQLObjectType({
     warehouses: {
       type: new GraphQLList(WarehouseType),
       resolve(parent, args) {
-        return Warehouse.find();
+        return Warehouse.find().populate("products").populate("history");
       },
     },
     warehouse: {
@@ -147,7 +147,6 @@ const mutation = new GraphQLObjectType({
         unit: { type: GraphQLNonNull(GraphQLString) },
       },
       async resolve(parent, args) {
-        console.log(args)
         return await Product.findByIdAndUpdate(
           args.id,
           {
@@ -174,9 +173,69 @@ const mutation = new GraphQLObjectType({
           name: args.name,
           status: args.status,
           size: args.size,
+          products: [],
+          history: [],
         });
 
         return warehouse.save();
+      },
+    },
+    updateWarehouse: {
+      type: ProductType,
+      args: {
+        id: { type: GraphQLNonNull(GraphQLID) },
+        productId: { type: GraphQLNonNull(GraphQLID) },
+        name: { type: GraphQLNonNull(GraphQLString) },
+        typeProduct: { type: GraphQLNonNull(GraphQLString) },
+        unit: { type: GraphQLNonNull(GraphQLString) },
+      },
+      async resolve(parent, args) {
+        const productTobeAdded = new Product({
+          _id: args.productId,
+          name: args.name,
+          typeProduct: args.typeProduct,
+          unit: args.unit,
+        });
+
+        const historyRecord = new History({
+          history_type: "Import",
+          productId: productTobeAdded._id,
+          amount: productTobeAdded.unit,
+        });
+
+        const warehouse = await Warehouse.findById(args.id).populate(
+          "products"
+        );
+
+        const item = warehouse.products.find(
+          (item) => item._id == productTobeAdded.id
+        );
+
+        if (item) item.unit = Number(item.unit) + Number(args.unit);
+        else warehouse.products.push(productTobeAdded);
+        warehouse.history.push(historyRecord);
+        await warehouse.save();
+
+        //upsert create new document if no exist
+        // return await Warehouse.findByIdAndUpdate(
+        //   args.id,
+        //   {
+        //     $set: {
+        //       products: productTobeAdded,
+        //       history: historyRecord,
+        //     },
+        //   },
+        //   { upsert: true }
+        // );
+      },
+    },
+    deleteProduct: {
+      type: ProductType,
+      args: {
+        id: { type: GraphQLNonNull(GraphQLID) },
+      },
+      async resolve(parent, args) {
+        return await Product.findByIdAndDelete(args.id);
       },
     },
     // History

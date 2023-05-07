@@ -7,6 +7,11 @@ const GET_WAREHOUSES = gql`
       name
       status
       size
+      products {
+        id
+        typeProduct
+        unit
+      }
     }
   }
 `;

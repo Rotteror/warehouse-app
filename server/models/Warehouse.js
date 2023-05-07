@@ -13,13 +13,7 @@ const WarehouseSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  products: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Product",
-      default: [],
-    },
-  ],
+  products: [{}],
   history: [
     {
       type: mongoose.Schema.Types.ObjectId,

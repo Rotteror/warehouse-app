@@ -1,9 +1,8 @@
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
 
 const HistorySchema = new mongoose.Schema({
   history_type: {
     type: String,
-    enum: ["Import", "Export"],
   },
   productId: {
     type: mongoose.Schema.Types.ObjectId,
@@ -16,6 +15,6 @@ const HistorySchema = new mongoose.Schema({
     type: Date,
     default: Date.now(),
   },
-})
+});
 
-module.exports = mongoose.model("History", HistorySchema)
+module.exports = mongoose.model("History", HistorySchema);

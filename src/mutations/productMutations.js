@@ -18,7 +18,12 @@ const UPDATE_PRODUCT = gql`
     $typeProduct: String!
     $unit: String!
   ) {
-    updateProduct( id: $id ,name: $name, typeProduct: $typeProduct, unit: $unit) {
+    updateProduct(
+      id: $id
+      name: $name
+      typeProduct: $typeProduct
+      unit: $unit
+    ) {
       id
       name
       typeProduct
