@@ -1,17 +1,18 @@
-# Angular App project - "Temple"
+# React / GraphQL / Node(Express) / MongoDB
 
-It's a small web project dedicated to all fitness lovers.
-"Temple" is a place in web where each user can create, read, and update fitness programs! Users can follow/unfollow , comment and share their thoughts for certain program. Have fun
+It's a small web project which aims to examine and confront real problems in our days. Good Warehouse managment system is of utmost importance for any organization operating with goods. 
 
-This project was generated with [Angular CLI] version 12.1.1.
 
 ## Development server
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:3000/`. The app will automatically reload if you change any of the source files.
+Run `npm run start` in `src` folder Navigate to `http://localhost:3000/`. The app will automatically reload if you change any of the source files.
 
 ## API
 
 Run `npm run dev` at `server` folder for a API server.
+
+## Database - MongoDB
+For better usage and managment of your db's , please install MongoDB Compass 
 
 ## GraphQl
 
