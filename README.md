@@ -42,3 +42,10 @@ npm install
 ## Overall
 
 Improved my React knowledge, first time `playing` with GraphQL (I like it)
+
+## Screenshots
+![image](https://user-images.githubusercontent.com/82669922/236786197-9a053ca9-aa08-4de2-8402-99c377c1ccd0.png)
+![image](https://user-images.githubusercontent.com/82669922/236786278-c5100c0d-d247-446e-8b96-a33dc1c9ccf5.png)
+![image](https://user-images.githubusercontent.com/82669922/236786352-346ba38b-3b99-4207-a682-c3563ab48655.png)
+
+
