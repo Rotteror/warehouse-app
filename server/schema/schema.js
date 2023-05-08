@@ -66,15 +66,15 @@ const RootQuery = new GraphQLObjectType({
   fields: {
     warehouses: {
       type: new GraphQLList(WarehouseType),
-      resolve(parent, args) {
-        return Warehouse.find().populate("products").populate("history");
+      async resolve(parent, args) {
+        return await Warehouse.find();
       },
     },
     warehouse: {
       type: WarehouseType,
       args: { id: { type: GraphQLID } },
-      resolve(parent, args) {
-        return Warehouse.findById(args.id);
+      async resolve(parent, args) {
+        return await Warehouse.findById(args.id);
       },
     },
     products: {
@@ -181,7 +181,7 @@ const mutation = new GraphQLObjectType({
       },
     },
     updateWarehouse: {
-      type: ProductType,
+      type: WarehouseType,
       args: {
         id: { type: GraphQLNonNull(GraphQLID) },
         productId: { type: GraphQLNonNull(GraphQLID) },
@@ -208,14 +208,25 @@ const mutation = new GraphQLObjectType({
         );
 
         const item = warehouse.products.find(
-          (item) => item._id == productTobeAdded.id
+          (item) => "" + item._id == productTobeAdded.id
         );
+        const indexItem = warehouse.products.indexOf(item);
+        if (item) {
+          const incrementItem = new Product({
+            _id: args.productId,
+            name: args.name,
+            typeProduct: args.typeProduct,
+            unit: Number(item.unit) + Number(args.unit),
+          });
+          warehouse.products.splice(indexItem, 1, incrementItem);
+        } else {
+          warehouse.products.push(productTobeAdded);
+        }
 
-        if (item) item.unit = Number(item.unit) + Number(args.unit);
-        else warehouse.products.push(productTobeAdded);
         warehouse.history.push(historyRecord);
         await warehouse.save();
-
+        return warehouse;
+        // TODO explore mongoDB updated array methods
         //upsert create new document if no exist
         // return await Warehouse.findByIdAndUpdate(
         //   args.id,
@@ -239,6 +250,23 @@ const mutation = new GraphQLObjectType({
       },
     },
     // History
+    addHistory: {
+      type: HistoryType,
+      args: {
+        history_type: { type: GraphQLNonNull(GraphQLString) },
+        productId: { type: GraphQLNonNull(GraphQLID) },
+        amount: { type: GraphQLNonNull(GraphQLString) },
+      },
+      resolve(parent, args) {
+        const history = new History({
+          history_type: args.history_type,
+          productId: args.productId,
+          amount: args.amount,
+        });
+
+        return history.save();
+      },
+    },
   },
 });
 

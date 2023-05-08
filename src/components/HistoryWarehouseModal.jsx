@@ -1,11 +1,22 @@
 import { FaHistory } from "react-icons/fa";
 import ProductRow from "./ProductRow";
+import { GET_WAREHOUSE } from "../queries/warehouseQueries";
+import { useParams } from "react-router-dom";
+import { useQuery } from "@apollo/client";
 
-export default function HistoryWareHouseModal({ products }) {
+export default function HistoryWareHouseModal() {
+  const { id } = useParams();
+
   const handleDownloadHistory = () => {
     // TO DO: use FileSaver depend
   };
 
+  const { loading, error, data } = useQuery(GET_WAREHOUSE, {
+    variables: { id },
+  });
+  
+  console.log(data, 'in modal');
+  
   return (
     <>
       <button
@@ -37,7 +48,7 @@ export default function HistoryWareHouseModal({ products }) {
               ></button>
             </div>
             <div className="modal-body">
-              {products === null ? (
+              {/* {products === null ? (
                 <p>No history have been registered for this warehouse.</p>
               ) : (
                 <table className="table table-hover text-dark mt-3">
@@ -47,7 +58,7 @@ export default function HistoryWareHouseModal({ products }) {
                     ))}
                   </tbody>
                 </table>
-              )}
+              )} */}
             </div>
             <div className="modal-footer">
               <button

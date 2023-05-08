@@ -27,6 +27,19 @@ const UPDATE_WAREHOUSE = gql`
       unit: $unit
     ) {
       id
+      name
+      status
+      size
+      products {
+        name
+        typeProduct
+        unit
+      }
+      history {
+        history_type
+        amount
+        created_At
+      }
     }
   }
 `;

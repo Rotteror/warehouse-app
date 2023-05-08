@@ -28,12 +28,6 @@ const GET_WAREHOUSE = gql`
       }
       history {
         id
-        history_type
-        amount
-        productId {
-          id
-        }
-        created_At
       }
     }
   }
